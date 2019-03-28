@@ -1,0 +1,20 @@
+[package]
+name = "class_register"
+version = "0.1.0"
+authors = ["alex <hortinstein@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+term-painter = "0.2.4"
+serde_derive = "1.0"
+serde = "1.0"
+toml = "*"
+
+[dev-dependencies]
+rand = "*"
+
+[profile.release]
+opt-level = 'z'     # Optimize for size.
+lto = true          # Enable Link Time Optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations.
+panic = 'abort'     # Abort on panic
