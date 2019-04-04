@@ -5,11 +5,6 @@ authors = ["alex <hortinstein@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-class_register = { git = "https://github.com/replicatedu/class_register.git" }
-term-painter = "0.2.4"
-serde_derive = "1.0"
-serde = "1.0"
-toml = "*"
 
 [dev-dependencies]
 rand = "*"
