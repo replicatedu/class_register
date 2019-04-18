@@ -13,6 +13,7 @@ use class_crypto::participant_to_str;
 use class_crypto::convert_me_to_serializable;
 use class_register::ClassRegister;
 
+use issue_database::ClassIssues;
 
 use term_painter::Color::*;
 use term_painter::ToStyle;
@@ -63,12 +64,13 @@ fn parse_key_mat(repo_name: &str, coord:&ClassCrypto) -> String{
 fn main (){
     let args: Vec<String> = env::args().collect();
 
-    if args.len() != 4 {
-        panic!("args: reposity_url repo_name public_key");
+    if args.len() != 5 {
+        panic!("args: reposity_url repository_api repo_name public_key");
     }
     let class_repo = &args[1];
-    let repo_name = &args[2];
-    let sk = &args[3];
+    let class_api = &args[2];
+    let repo_name = &args[3];
+    let sk = &args[4];
 
     let path = "/tmp/";
 
@@ -83,6 +85,7 @@ fn main (){
                                       username.to_string(),
                                       password.to_string());
 
+    /////////////////////////////////////////////////////////////////
     println!("{}", Yellow.paint("creating student crypto: "));
     let mut print_gag = Gag::stdout().unwrap();
     
@@ -92,7 +95,7 @@ fn main (){
     drop(print_gag);
     println!("{}", Green.paint("\tdone"));
 
-
+    /////////////////////////////////////////////////////////////////
     println!("{}", Yellow.paint("creating student private repo: "));
     let mut print_gag = Gag::stdout().unwrap();
     
@@ -103,7 +106,7 @@ fn main (){
     drop(print_gag);
     println!("{}", Green.paint("\tdone"));
 
-
+    /////////////////////////////////////////////////////////////////
     println!("{}", Yellow.paint("adding crypto to repo: "));
     let mut print_gag = Gag::stdout().unwrap();
     
@@ -113,7 +116,7 @@ fn main (){
     drop(print_gag);
     println!("{}", Green.paint("\tdone"));
 
-
+    /////////////////////////////////////////////////////////////////
     println!("{}", Yellow.paint("adding deploy key to repo: "));
     let mut print_gag = Gag::stdout().unwrap();    
 
@@ -123,5 +126,29 @@ fn main (){
 
     drop(print_gag);
     println!("{}", Green.paint("\tdone"));
+
+    /////////////////////////////////////////////////////////////////
+    println!("{}", Yellow.paint("registering to class database: "));
+    let mut print_gag = Gag::stdout().unwrap();    
+
+    //"https://api.github.com/repos/replicatedu/issue_database" 
+    let issue = ClassIssues::new(class_api.to_string(),
+                                 username.to_string(),
+                                 password.to_string());
+    
+    let mut my_repo: String = "".to_owned();
+    //https://github.com/hortinstein/testme.git
+    my_repo.push_str(&format!(
+        "https://github.com/{}/{}.git",
+        username, repo_name
+    ));
+    
+    //encrypt the repo for registry
+    let enc_my_repo = student_crypto.encrypt_to_toml(my_repo.as_bytes().to_vec(), coord_key.return_pk());
+    issue.register(&enc_my_repo);
+
+    drop(print_gag);
+    println!("{}", Green.paint("\tdone"));
+
 
 }
