@@ -1,5 +1,6 @@
 use std::str;
 
+use std::fs;
 use std::fs::File;
 use std::fs::OpenOptions;
 
@@ -64,13 +65,12 @@ fn parse_key_mat(repo_name: &str, coord:&ClassCrypto) -> String{
 fn main (){
     let args: Vec<String> = env::args().collect();
 
-    if args.len() != 5 {
-        panic!("args: reposity_url repository_api repo_name public_key");
+    if args.len() != 4 {
+        panic!("args: reposity_url repo_name public_key");
     }
     let class_repo = &args[1];
-    let class_api = &args[2];
-    let repo_name = &args[3];
-    let sk = &args[4];
+    let repo_name = &args[2];
+    let sk = &args[3];
 
     let path = "/tmp/";
 
@@ -129,10 +129,13 @@ fn main (){
 
     /////////////////////////////////////////////////////////////////
     println!("{}", Yellow.paint("registering to class database: "));
-    let mut print_gag = Gag::stdout().unwrap();    
+    //let mut print_gag = Gag::stdout().unwrap();    
 
+    let class_api = fs::read_to_string(&(repo_path.clone()+&"/api_addr".to_owned()))
+        .expect("Something went wrong reading the api_addr");
+    dbg!(&class_api);
     //"https://api.github.com/repos/replicatedu/issue_database" 
-    let issue = ClassIssues::new(class_api.to_string(),
+    let issue = ClassIssues::new(class_api,
                                  username.to_string(),
                                  password.to_string());
     
@@ -147,7 +150,7 @@ fn main (){
     let enc_my_repo = student_crypto.encrypt_to_toml(my_repo.as_bytes().to_vec(), coord_key.return_pk());
     issue.register(&enc_my_repo);
 
-    drop(print_gag);
+    //drop(print_gag);
     println!("{}", Green.paint("\tdone"));
 
 
