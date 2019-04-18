@@ -57,6 +57,13 @@ impl ClassRegister {
                                     "/tmp/",
                                     key);
     }
+    pub fn add_file( &self, filename:&str,repo_path:&str){
+        git_wrapper::pass_add_file( filename, 
+                                    repo_path,
+                                    &self.username, 
+                                    &self.password,
+                                    &self.repo_name);
+    }
 }
 
 #[cfg(test)]
