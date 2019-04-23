@@ -11,6 +11,4 @@ use term_painter::Color::*;
 use term_painter::ToStyle;
 use toml;
 
-pub fn main() {
-   
-}
+pub fn main() {}

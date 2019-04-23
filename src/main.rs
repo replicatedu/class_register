@@ -1,5 +1,5 @@
-use replicatedu_student::main_register;
 use replicatedu_student::check_reg;
+use replicatedu_student::main_register;
 use std::env;
 use std::thread;
 fn main() {
