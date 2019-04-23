@@ -93,7 +93,7 @@ pub fn main_register() {
 
     /////////////////////////////////////////////////////////////////
     println!("{}", Yellow.paint("creating student crypto: "));
-    let mut print_gag = Gag::stdout().unwrap();
+    let print_gag = Gag::stdout().unwrap();
 
     let student_crypto = ClassCrypto::new(username, false);
     let studend_crypto_toml = participant_to_str(convert_me_to_serializable(&student_crypto));
@@ -103,7 +103,7 @@ pub fn main_register() {
 
     /////////////////////////////////////////////////////////////////
     println!("{}", Yellow.paint("creating student private repo: "));
-    let mut print_gag = Gag::stdout().unwrap();
+    let print_gag = Gag::stdout().unwrap();
 
     register.create_repo();
     register.clone_repo_to_private();
@@ -113,7 +113,7 @@ pub fn main_register() {
     println!("{}", Green.paint("\tdone"));
     /////////////////////////////////////////////////////////////////
     println!("{}", Yellow.paint("adding crypto to repo: "));
-    let mut print_gag = Gag::stdout().unwrap();
+    let print_gag = Gag::stdout().unwrap();
 
     write_file(
         &(repo_path.clone() + &"/my_crypto.toml".to_owned()),
@@ -126,7 +126,7 @@ pub fn main_register() {
 
     /////////////////////////////////////////////////////////////////
     println!("{}", Yellow.paint("adding deploy key to repo: "));
-    let mut print_gag = Gag::stdout().unwrap();
+    let print_gag = Gag::stdout().unwrap();
 
     let coord_key =
         ClassCrypto::new_from_sk("coord", sk.to_string(), false).expect("crypto failed");

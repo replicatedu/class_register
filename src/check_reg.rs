@@ -37,7 +37,7 @@ pub fn main() {
     let thirty_seconds = time::Duration::from_secs(30);
     println!("{}", Green.paint("entering register checking loop"));
     let found = false;
-    while (found == false) {
+    while found == false {
         let did_panic = panic::catch_unwind(|| {
             let open_regs = issue.view_registrations().expect("error getting api");
             for reg in &open_regs {
