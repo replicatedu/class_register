@@ -1,0 +1,87 @@
+use class_crypto;
+use class_crypto::serialization::{Message, Participant};
+use class_crypto::ClassCrypto;
+use issue_database::ClassIssues;
+use std::env;
+use std::fs;
+use std::panic;
+use std::str;
+use std::{thread, time};
+use term_painter::Color::*;
+use term_painter::ToStyle;
+use toml;
+
+pub fn main() {
+    let username = &env::var("GITHUB_USERNAME").expect("set the GITHUB_USERNAME env");
+    let password = env::var("GITHUB_PASSWORD").expect("set the GITHUB_PASSWORD env");
+
+    let class_api = fs::read_to_string("api_addr".to_owned()).expect(
+        "error reading the api_addr file, start daemon in an initialized repo \
+         folder or move the api_addr to your location",
+    );
+
+    let my_cryto_file_string = fs::read_to_string("my_crypto.toml".to_owned()).expect(
+        "error reading the my_crypto file, start daemon in an initialized repo \
+         folder or move the my_crypto to your location",
+    );
+
+    let my_cryto_obj: Participant =
+        toml::from_str(&my_cryto_file_string).expect("error parsing my crypto");
+   
+    let my_cryto = ClassCrypto::new_from_sk("me", my_cryto_obj.sk, true)
+        .expect("error creating cryto obj");
+   
+   
+    let issue = ClassIssues::new(class_api, username.to_string(), password.to_string());
+
+    let thirty_seconds = time::Duration::from_secs(30);
+    println!("{}", Green.paint("entering register checking loop"));
+    let found = false;
+    while (found == false) {
+        let did_panic = panic::catch_unwind(|| {
+            let open_regs = issue.view_registrations().expect("error getting api");
+            for reg in &open_regs {
+                let reg_panic = panic::catch_unwind(|| {
+                    //dbg!(reg);
+                    let issues_d = issue.view_issues(reg);
+                    for issued in issues_d{
+                        dbg!(issued);
+                        // let dec = my_cryto.decrypt_from_toml(issued);
+                        // if dec == "confirmed"{
+                        //     println!(
+                        //        "{}",
+                        //         Green.paint("panic: invalid reg...trying next")
+                        //     );
+                        // }
+                    }
+                    
+                    // for issue in issues{
+                    //     dbg!(issue);
+                    //     let student_message: Message =
+                    //     toml::from_str(&reg.body).expect("error reading toml");
+                    //     let plain_message = coord_cryto
+                    //         .decrypt_from_toml(&reg.body)
+                    //         .expect("error decrypting");
+                    //     dbg!(plain_message);
+                    // }  
+                });
+                if reg_panic.is_err() {
+                    println!(
+                        "{}",
+                        Red.paint("panic: invalid reg...trying next")
+                    );
+                }
+
+            }
+        });
+        if did_panic.is_err() {
+            println!(
+                "{}",
+                Red.paint("panic: api url incorrect, make sure running this from student dir ")
+            );
+        }
+        println!("{}", Green.paint("sleeping 30 seconds before next check "));
+
+        thread::sleep(thirty_seconds);
+    }
+}
