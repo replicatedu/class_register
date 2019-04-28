@@ -1,7 +1,7 @@
 
+use class_crypto::ClassCrypto;
 use class_crypto;
 use class_crypto::serialization::{Message, Participant};
-use class_crypto::ClassCrypto;
 use issue_database::ClassIssues;
 use std::env;
 use std::fs;

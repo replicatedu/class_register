@@ -11,7 +11,7 @@ use std::{thread, time};
 use term_painter::Color::*;
 use term_painter::ToStyle;
 use toml;
-
+use std::fs::File;
 pub fn main() {
     let username = &env::var("GITHUB_USERNAME").expect("set the GITHUB_USERNAME env");
     let password = env::var("GITHUB_PASSWORD").expect("set the GITHUB_PASSWORD env");
