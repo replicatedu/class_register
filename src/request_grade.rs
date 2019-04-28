@@ -22,7 +22,7 @@ fn read_file_to_string(filepath: &str) -> String {
 }
 fn parse_key_mat(repo_name: &str, coord: &ClassCrypto) -> String {
     let mut deploy_key_path = "".to_string();
-    deploy_key_path.push_str(&format!("/tmp/{}/deploy_key.toml", repo_name));
+    deploy_key_path.push_str("deploy_key.toml");
 
     let deploy_key_enc = read_file_to_string(&deploy_key_path);
 
