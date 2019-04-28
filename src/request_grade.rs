@@ -15,7 +15,7 @@ pub fn main() {
     let args: Vec<String> = env::args().collect();
 
      if args.len() != 4 {
-        panic!("args: --create my_reposity_url coord_key");
+        panic!("args: --grade my_reposity_url coord_key");
     }
     let username = &env::var("GITHUB_USERNAME").expect("set the GITHUB_USERNAME env");
     let password = env::var("GITHUB_PASSWORD").expect("set the GITHUB_PASSWORD env");
