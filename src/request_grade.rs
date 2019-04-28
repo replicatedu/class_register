@@ -46,7 +46,7 @@ pub fn main() {
     let sk = &args[3];
 
     //loading it to send back to the student to confirm
-    let student_cryto_file_string = fs::read_to_string("my_crytpo.toml".to_owned())
+    let student_cryto_file_string = fs::read_to_string("my_crypto.toml".to_owned())
         .expect(
             "error reading the instructor_keys.toml file, start daemon in an initialized repo \
              folder or move the instructor_keys.toml to your location",
